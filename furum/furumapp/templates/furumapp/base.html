@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset = "UTF-8">
+        <title>Furum</title>
+        {% load static %}
+        {% load django_bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+    </head>
+    <body>
+
+        <div class="d-flex justify-content-center py-2 bg-warning bg-gradient">
+            <a class="link-dark text-decoration-none fs-1 fw-bold" href = "/furum/">Furum</a>
+        </div>
+        <div class="mb-5">
+            <main>
+                {% block content %}
+                {% endblock %}
+            </main>
+        </div>
+        <footer class="fixed-bottom">
+            <div class="d-flex justify-content-center py-1 bg-warning bg-gradient">
+                <p class="fs-3 fw-bold">Footer placeholder</p>
+            </div>
+        </footer>
+
+    </body>
+</html>
