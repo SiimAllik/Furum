@@ -21,10 +21,16 @@
     {%endif%}
     {% if comments %}
             {% for comment in comments %}
-                <div class="d-flex flex-column align-items-center pb-4 mb-2">
+                <div class="d-flex flex-column align-items-center pb-4 mb-2 border">
                         <p class="fs-2 fw-bold">{{ comment.text }}</p>
                         <p class="fs-5 fw-bold">{{ comment.user.username }}</p>
                         <p class="fs-5 fw-bold">{{ comment.timestamp }}</p>
+                    {%if request.user == comment.user %}
+                        <form action="{% url 'comment_delete' post.id comment.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Delete">
+                        </form>
+                    {%endif%}
                 </div>
             {% endfor %}
     {% else %}

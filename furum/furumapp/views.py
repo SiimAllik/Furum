@@ -96,8 +96,30 @@ def Post_Details(request, post_id):
             comment.post = post
             comment.save()
             messages.success(request, 'Comment successful.')
+            post.comment_count = post.comment_count + 1
+            post.save()
             return redirect('postdetails', post_id=post_id)
         else:
             comments = Comment.objects.filter(post=post)
             context = {"post": post, "comments": comments, "form": form}
             return render(request, 'furumapp/postdetails.html', context)
+
+def comment_delete(request, post_id, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.method == 'POST':
+        comment.delete()
+        post.comment_count = post.comment_count - 1
+        post.save()
+        return redirect('postdetails', post_id)
+
+    return render(request, 'postdetails.html', {'comment':comment})
+
+def post_delete(request, topic, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.method == 'POST':
+        post.delete()
+
+    return redirect('posts', topic=topic)

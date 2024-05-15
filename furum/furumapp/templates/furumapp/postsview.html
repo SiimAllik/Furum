@@ -15,13 +15,19 @@
         {%endif%}
         {% if posts %}
             {% for post in posts %}
-                <div class="d-flex flex-column align-items-center pb-4 mb-2">
+                <div class="d-flex flex-column align-items-center pb-4 mb-2 border">
                     <a class="w-25 link-dark text-decoration-none" href="/furum/post/{{ post.id }}/">
                         <p class="fs-2 fw-bold">{{ post.title }}</p>
                         <p class="fs-5 fw-bold">{{ post.user.username }}</p>
                         <p class="fs-5 fw-bold">{{ post.timestamp }}</p>
                         <p class="fs-5 fw-bold">{{ post.comment_count }} comments</p>
                     </a>
+                    {%if request.user == post.user %}
+                        <form action="{% url 'post_delete' topic post.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Delete">
+                        </form>
+                    {%endif%}
                 </div>
             {% endfor %}
     {% else %}
