@@ -1,0 +1,31 @@
+{% extends "furumapp/base.html" %}
+
+{% block content %}
+
+    {% if query %}
+        <div>
+            <p class="fs-1 fw-bold m-3">Search results for: {{ query }}</p>
+            <div>
+            <!-- check if there is a result in the database-->
+            {% if posts %}
+                <!-- loop through search query if there is a result -->
+                {% for post in posts %}
+                    <div class="d-flex flex-column align-items-start mb-2 border">
+                        <a class="w-100 link-dark text-decoration-none px-5" href="/furum/post/{{ post.id }}/">
+                            <p class="fs-2 fw-bold">{{ post.title }}</p>
+                            <p class="">Posted by {{ post.user.username }} on {{ post.timestamp }}</p>
+                            <p class="fw-bold">{{ post.comment_count }} comments</p>
+                        </a>
+                    </div>
+                {% endfor %}
+                <!-- return a message if there are no results found. -->
+            {% else %}
+                <h3>No search results found</h3>
+            {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <h1>Please enter a search query</h1>
+    {% endif %}
+
+{% endblock content %}

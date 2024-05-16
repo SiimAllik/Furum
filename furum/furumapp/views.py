@@ -4,12 +4,10 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from .forms import LoginForm, RegisterForm, PostForm, CommentForm
 from .models import Post, Comment
+from django.db.models import Q
 import datetime
 def Home_View(request):
     return render(request, "furumapp/index.html")
-
-def default_view(request):
-    return redirect('furum')  # Replace 'desired_url_name' with the name of the URL pattern you want to redirect to
 
 def sign_up(request):
     if request.method == 'GET':
@@ -73,11 +71,7 @@ def Posts_View(request, topic):
             post.comment_count = 0
             post.save()
             messages.success(request, 'Post successful.')
-            return redirect('posts', topic=topic)
-        else:
-            posts = Post.objects.filter(topic=topic)
-            context = {"posts": posts, "topic": topic, "form": form}
-            return render(request, 'furumapp/postsview.html', context)
+        return redirect('posts', topic=topic)
 
 def Post_Details(request, post_id):
     if request.method == 'GET':
@@ -86,7 +80,7 @@ def Post_Details(request, post_id):
         comments = Comment.objects.filter(post=post)
         context = {"post": post, "comments": comments, "form": form}
         return render(request, "furumapp/postdetails.html", context)
-    if request.method == 'POST':
+    elif request.method == 'POST':
         form = CommentForm(request.POST)
         post = get_object_or_404(Post, id=post_id)
         if form.is_valid():
@@ -98,11 +92,7 @@ def Post_Details(request, post_id):
             messages.success(request, 'Comment successful.')
             post.comment_count = post.comment_count + 1
             post.save()
-            return redirect('postdetails', post_id=post_id)
-        else:
-            comments = Comment.objects.filter(post=post)
-            context = {"post": post, "comments": comments, "form": form}
-            return render(request, 'furumapp/postdetails.html', context)
+        return redirect('postdetails', post_id=post_id)
 
 def comment_delete(request, post_id, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
@@ -112,9 +102,8 @@ def comment_delete(request, post_id, comment_id):
         comment.delete()
         post.comment_count = post.comment_count - 1
         post.save()
-        return redirect('postdetails', post_id)
 
-    return render(request, 'postdetails.html', {'comment':comment})
+    return redirect('postdetails', post_id)
 
 def post_delete(request, topic, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -123,3 +112,9 @@ def post_delete(request, topic, post_id):
         post.delete()
 
     return redirect('posts', topic=topic)
+
+def search(request):
+        if request.method == "GET":
+            search_query = request.GET.get('search_query')
+            posts = Post.objects.filter(Q(title__icontains=search_query) | Q(text__icontains=search_query))
+            return render(request, 'furumapp/searchpost.html', {'query': search_query, 'posts': posts})

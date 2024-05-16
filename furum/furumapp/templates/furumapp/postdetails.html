@@ -2,29 +2,29 @@
 {% load static %}
 
 {% block content %}
-    <div class="container p-4 d-flex flex-column">
+    <div class="container p-4 d-flex flex-column border shadow">
         <p class="fs-1 fw-bold">{{ post.title }}</p>
-        <p class="fs-5 fw-bold">{{ post.user }}</p>
-        <p class="fs-5 fw-bold">{{ post.timestamp }}</p>
-        <p class="fs-2 fw-bold">{{ post.text }}</p>
+        <p class="fs-5">Posted by {{ post.user }} on {{ post.timestamp }}</p>
+        <p class="fs-2">{{ post.text }}</p>
     </div>
 
      {%if request.user.is_authenticated %}
-       <div>
-            <form method="POST" novalidate>
-                {% csrf_token %}
-                <h2>Comment</h2>
-                {{form.as_p}}
-                <input type="submit" value="Post" />
-            </form>
-        </div>
+            <div class="mb-4 px-5">
+                <form method="POST">
+                    {% csrf_token %}
+                    <p class="fs-3 fw-bold">Comment</p>
+                    {{form.as_p}}
+                    <input type="submit" value="Post" />
+                </form>
+            </div>
     {%endif%}
     {% if comments %}
+        <div class="d-flex flex-column align-items-center">
             {% for comment in comments %}
-                <div class="d-flex flex-column align-items-center pb-4 mb-2 border">
-                        <p class="fs-2 fw-bold">{{ comment.text }}</p>
-                        <p class="fs-5 fw-bold">{{ comment.user.username }}</p>
-                        <p class="fs-5 fw-bold">{{ comment.timestamp }}</p>
+                <div class="shadow w-100 d-flex flex-column mb-4 pb-2 px-5 border">
+                        <p class="fs-4 fw-bold">{{ comment.user.username }}</p>
+                        <p>Posted on {{ comment.timestamp }}</p>
+                        <p class="fw-bold">{{ comment.text }}</p>
                     {%if request.user == comment.user %}
                         <form action="{% url 'comment_delete' post.id comment.id %}" method="post">
                             {% csrf_token %}
@@ -33,6 +33,7 @@
                     {%endif%}
                 </div>
             {% endfor %}
+        </div>
     {% else %}
         <p class="fs-3">No posts in this topic.</p>
     {% endif %}
