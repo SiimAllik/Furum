@@ -2,15 +2,57 @@
 {% load static %}
 
 {% block content %}
-    <div class="container mt-5 p-4 d-flex flex-column">
-        <p class="fs-2 fw-bold">Welcome, chatterpillar</p>
-        <a class="link-dark text-center text-decoration-none fs-5 fw-bold bg-warning p-3 my-2 rounded" href="/furum/posts/cats">CATS</a>
-        <a class="link-dark text-center text-decoration-none fs-5 fw-bold bg-warning p-3 my-2 rounded" href="/furum/posts/dogs">DOGS</a>
-        <a class="link-dark text-center text-decoration-none fs-5 fw-bold bg-warning p-3 my-2 rounded" href="/furum/posts/rodents">RODENTS</a>
-        <a class="link-dark text-center text-decoration-none fs-5 fw-bold bg-warning p-3 my-2 rounded" href="/furum/posts/birds">BIRDS</a>
-        <a class="link-dark text-center text-decoration-none fs-5 fw-bold bg-warning p-3 my-2 rounded" href="/furum/posts/farmanimals">FARM ANIMALS</a>
-        <a class="link-dark text-center text-decoration-none fs-5 fw-bold bg-warning p-3 my-2 rounded" href="/furum/posts/exotic">EXOTIC</a>
-        <a class="link-dark text-center text-decoration-none fs-5 fw-bold bg-warning p-3 my-2 rounded" href="/furum/posts/miscellaneous">MISCELLANEOUS</a>
-        <a class="link-dark text-center text-decoration-none fs-5 fw-bold bg-warning p-3 my-2 rounded" href="/furum/posts/buysell">BUY & SELL</a>
+    <div class="container mt-5 p-4">
+                <p class="fs-2 fw-bold">Welcome, chatterpillar</p>
+    </div>
+    <div class="container d-flex flex-row flex-wrap">
+        <div class="card bg-warning m-2 py-4" style="width: 19rem;">
+              <div class="card-body d-flex flex-column align-items-center">
+                    <a href="/furum/posts/cats" class="link-dark text-center text-decoration-none fs-5 fw-bold my-2 stretched-link">CATS</a>
+                    <p class="card-text">3 posts</p>
+              </div>
+        </div>
+        <div class="card bg-warning m-2 py-4" style="width: 19rem;">
+              <div class="card-body d-flex flex-column align-items-center">
+                    <a href="/furum/posts/dogs" class="link-dark text-center text-decoration-none fs-5 fw-bold my-2 stretched-link">DOGS</a>
+                    <p class="card-text">3 posts</p>
+              </div>
+        </div>
+        <div class="card bg-warning m-2 py-4" style="width: 19rem;">
+              <div class="card-body d-flex flex-column align-items-center">
+                    <a href="/furum/posts/rodents" class="link-dark text-center text-decoration-none fs-5 fw-bold my-2 stretched-link">RODENTS</a>
+                    <p class="card-text">3 posts</p>
+              </div>
+        </div>
+        <div class="card bg-warning m-2 py-4" style="width: 19rem;">
+              <div class="card-body d-flex flex-column align-items-center">
+                    <a href="/furum/posts/birds" class="link-dark text-center text-decoration-none fs-5 fw-bold my-2 stretched-link">BIRDS</a>
+                    <p class="card-text">3 posts</p>
+              </div>
+        </div>
+        <div class="card bg-warning m-2 py-4" style="width: 19rem;">
+              <div class="card-body d-flex flex-column align-items-center">
+                    <a href="/furum/posts/farmanimals" class="link-dark text-center text-decoration-none fs-5 fw-bold my-2 stretched-link">FARM ANIMALS</a>
+                    <p class="card-text">3 posts</p>
+              </div>
+        </div>
+        <div class="card bg-warning m-2 py-4" style="width: 19rem;">
+              <div class="card-body d-flex flex-column align-items-center">
+                    <a href="/furum/posts/exotic" class="link-dark text-center text-decoration-none fs-5 fw-bold my-2 stretched-link">EXOTIC</a>
+                    <p class="card-text">3 posts</p>
+              </div>
+        </div>
+        <div class="card bg-warning m-2 py-4" style="width: 19rem;">
+              <div class="card-body d-flex flex-column align-items-center">
+                    <a href="/furum/posts/miscellaneous" class="link-dark text-center text-decoration-none fs-5 fw-bold my-2 stretched-link">MISC</a>
+                    <p class="card-text">3 posts</p>
+              </div>
+        </div>
+        <div class="card bg-warning m-2 py-4" style="width: 19rem;">
+              <div class="card-body d-flex flex-column align-items-center">
+                    <a href="/furum/posts/buysell" class="link-dark text-center text-decoration-none fs-5 fw-bold my-2 stretched-link">BUY & SELL</a>
+                    <p class="card-text">3 posts</p>
+              </div>
+        </div>
     </div>
 {% endblock %}

@@ -7,26 +7,31 @@
            <div class="mb-4">
                 <form method="POST">
                     {% csrf_token %}
-                    <p class="fs-3 fw-bold">Create post</p>
-                    {{form.as_p}}
-                    <input type="submit" value="Post" />
+                    <p class="fs-2 fw-bold">Add post</p>
+                    <input class="form-control w-50" type="text" name="title" placeholder="Post title">
+                    <textarea class="form-control my-3 py-3 w-50" type="text" name="text" placeholder="What's on your mind?"></textarea>
+                    <input class="btn btn-warning " type="submit" value="Post" />
                 </form>
             </div>
         {%endif%}
         {% if posts %}
             {% for post in posts %}
-                <div class="d-flex flex-column align-items-start mb-2 border">
-                    <a class="w-100 link-dark text-decoration-none px-5" href="/furum/post/{{ post.id }}/">
-                        <p class="fs-2 fw-bold">{{ post.title }}</p>
-                        <p class="">Posted by {{ post.user.username }} on {{ post.timestamp }}</p>
-                        <p class="fw-bold">{{ post.comment_count }} comments</p>
+                <div class="d-flex flex-column align-items-start mb-2 py-2 border rounded-3">
+                    <a class="w-100 d-flex flex-row link-dark text-decoration-none px-5" href="/furum/post/{{ post.id }}/">
+                        <div class="w-75">
+                            <p class="my-0 fs-4 fw-bold">{{ post.title }}</p>
+                            <p class="my-0">Posted by {{ post.user.username }} on {{ post.timestamp }}</p>
+                            <p class="fw-bold">{{ post.comment_count }} comments</p>
+                        </div>
+                        {%if request.user == post.user %}
+                        <div class="w-25 d-flex justify-content-end align-items-center">
+                            <form action="{% url 'post_delete' topic post.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Delete" class="btn btn-danger btn-sm ">
+                            </form>
+                        </div>
+                        {%endif%}
                     </a>
-                    {%if request.user == post.user %}
-                        <form action="{% url 'post_delete' topic post.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="submit" value="Delete">
-                        </form>
-                    {%endif%}
                 </div>
             {% endfor %}
     {% else %}

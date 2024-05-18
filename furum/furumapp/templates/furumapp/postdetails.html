@@ -2,39 +2,51 @@
 {% load static %}
 
 {% block content %}
-    <div class="container p-4 d-flex flex-column border shadow">
-        <p class="fs-1 fw-bold">{{ post.title }}</p>
-        <p class="fs-5">Posted by {{ post.user }} on {{ post.timestamp }}</p>
-        <p class="fs-2">{{ post.text }}</p>
-    </div>
+    <div class="container mt-5 d-flex flex-column justify-content-center">
 
-     {%if request.user.is_authenticated %}
-            <div class="mb-4 px-5">
-                <form method="POST">
-                    {% csrf_token %}
-                    <p class="fs-3 fw-bold">Comment</p>
-                    {{form.as_p}}
-                    <input type="submit" value="Post" />
-                </form>
+        <!-- Post info - title, poster, posting time, text -->
+        <div class="px-5 py-3 d-flex flex-column shadow">
+            <div class="d-flex justify-content-between">
+                <p class="fs-2 fw-bold">{{ post.title }}</p>
+                <p class="">Posted by {{ post.user }} on {{ post.timestamp }}</p>
             </div>
-    {%endif%}
-    {% if comments %}
-        <div class="d-flex flex-column align-items-center">
-            {% for comment in comments %}
-                <div class="shadow w-100 d-flex flex-column mb-4 pb-2 px-5 border">
-                        <p class="fs-4 fw-bold">{{ comment.user.username }}</p>
-                        <p>Posted on {{ comment.timestamp }}</p>
-                        <p class="fw-bold">{{ comment.text }}</p>
+            <div class="d-flex">
+                <p class="fs-5">{{ post.text }}</p>
+            </div>
+        </div>
+
+        <!-- Comment form, only visible when user is logged in -->
+         {%if request.user.is_authenticated %}
+                <div class="my-5">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <textarea class="form-control mt-3 py-3 w-100 d-inline" type="text" name="comment_text" placeholder="Add comment" aria-label="Add comment"></textarea>
+                        <div class="d-flex justify-content-end">
+                            <input class="btn btn-success" type="submit" value="Post comment" />
+                        </div>
+                    </form>
+                </div>
+        {%endif%}
+
+        <!-- Comments -->
+        {% if comments %}
+                {% for comment in comments %}
+                <div class="d-flex justify-content-between my-2 py-2 px-5 border rounded-3">
+                    <div class="d-flex flex-column">
+                            <p class="fs-5 fw-bold my-0">{{ comment.user.username }}</p>
+                            <p class="my-0">Posted on {{ comment.timestamp }}</p>
+                            <p class="fw-bold">{{ comment.text }}</p>
+                    </div>
                     {%if request.user == comment.user %}
-                        <form action="{% url 'comment_delete' post.id comment.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="submit" value="Delete">
-                        </form>
+                        <div class="d-flex align-items-center">
+                            <form action="{% url 'comment_delete' post.id comment.id %}" method="post">
+                                {% csrf_token %}
+                                <input class="btn btn-danger" type="submit" value="Delete">
+                            </form>
+                        </div>
                     {%endif%}
                 </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <p class="fs-3">No posts in this topic.</p>
-    {% endif %}
+                {% endfor %}
+        {% endif %}
+    </div>
 {% endblock %}

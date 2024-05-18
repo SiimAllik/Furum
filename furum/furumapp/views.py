@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from .forms import LoginForm, RegisterForm, PostForm, CommentForm
+from .forms import LoginForm, RegisterForm
 from .models import Post, Comment
 from django.db.models import Q
 import datetime
@@ -30,25 +30,21 @@ def sign_in(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
             return redirect('home')
-
-        form = LoginForm()
-        return render(request, 'furumapp/login.html', {'form': form})
+        return render(request, 'furumapp/login.html')
 
     elif request.method == 'POST':
-        form = LoginForm(request.POST)
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user:
-                login(request, user)
-                messages.success(request, f'Hi {username.title()}, welcome back!')
-                return redirect('home')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            messages.success(request, f'Hi {username.title()}, welcome back!')
+            return redirect('home')
 
         # form is not valid or user is not authenticated
         messages.error(request, f'Invalid username or password')
-        return render(request, 'furumapp/login.html', {'form': form})
+        return render(request, 'furumapp/login.html')
 
 def sign_out(request):
     logout(request)
@@ -57,41 +53,43 @@ def sign_out(request):
 
 def Posts_View(request, topic):
     if request.method == 'GET':
-        form = PostForm()
         posts = Post.objects.filter(topic=topic)
-        context = {"posts": posts, "topic": topic, "form": form}
+        context = {"posts": posts, "topic": topic}
         return render(request, "furumapp/postsview.html", context)
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.timestamp = datetime.datetime.now()
-            post.user = request.user
-            post.topic = topic
-            post.comment_count = 0
-            post.save()
-            messages.success(request, 'Post successful.')
+    elif request.method == 'POST':
+        post_text = request.POST.get('text')
+        post_title = request.POST.get('title')
+        post = Post(
+            title = post_title,
+            text = post_text,
+            timestamp = datetime.datetime.now(),
+            user=request.user,
+            topic=topic,
+            comment_count=0
+        )
+        post.save()
+        messages.success(request, 'Post successful.')
         return redirect('posts', topic=topic)
 
 def Post_Details(request, post_id):
     if request.method == 'GET':
-        form = CommentForm()
         post = get_object_or_404(Post, id=post_id)
         comments = Comment.objects.filter(post=post)
-        context = {"post": post, "comments": comments, "form": form}
+        context = {"post": post, "comments": comments}
         return render(request, "furumapp/postdetails.html", context)
     elif request.method == 'POST':
-        form = CommentForm(request.POST)
+        comment_text = request.POST.get('comment_text')
         post = get_object_or_404(Post, id=post_id)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.timestamp = datetime.datetime.now()
-            comment.user = request.user
-            comment.post = post
-            comment.save()
-            messages.success(request, 'Comment successful.')
-            post.comment_count = post.comment_count + 1
-            post.save()
+        comment = Comment(
+            text = comment_text,
+            timestamp = datetime.datetime.now(),
+            user=request.user,
+            post=post
+        )
+        comment.save()
+        messages.success(request, 'Comment successful.')
+        post.comment_count = post.comment_count + 1
+        post.save()
         return redirect('postdetails', post_id=post_id)
 
 def comment_delete(request, post_id, comment_id):
