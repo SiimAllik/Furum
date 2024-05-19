@@ -6,6 +6,11 @@
 
         <!-- Post info - title, poster, posting time, text -->
         <div class="px-5 py-3 d-flex flex-column shadow">
+            {%if post.image %}
+            <div>
+                <img src="/static/images/{{ post.image.url }}" width="120">
+            </div>
+            {%endif%}
             <div class="d-flex justify-content-between">
                 <p class="fs-2 fw-bold">{{ post.title }}</p>
                 <p class="">Posted by {{ post.user }} on {{ post.timestamp }}</p>

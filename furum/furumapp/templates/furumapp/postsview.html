@@ -4,12 +4,13 @@
 {% block content %}
     <div class="container mt-3 d-flex flex-column justify-content-center">
         {%if request.user.is_authenticated %}
-           <div class="mb-4">
-                <form method="POST">
+           <div class="mb-4 w-50">
+                <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <p class="fs-2 fw-bold">Add post</p>
-                    <input class="form-control w-50" type="text" name="title" placeholder="Post title">
-                    <textarea class="form-control my-3 py-3 w-50" type="text" name="text" placeholder="What's on your mind?"></textarea>
+                    {{form.title}}
+                    {{form.text}}
+                    {{form.image}}
                     <input class="btn btn-warning " type="submit" value="Post" />
                 </form>
             </div>
