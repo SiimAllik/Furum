@@ -20,7 +20,9 @@ class RegisterForm(UserCreationForm):
 class PostForm(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control", "name":"title","placeholder":"Post title"}))
     text = forms.CharField(widget=forms.Textarea(attrs={"class":"form-control my-2", "name":"text", "placeholder":"What's on your mind?", "rows":4}))
-    image = forms.CharField(required=False, widget=forms.TextInput(attrs={"class":"form-control mb-2", "name":"image", "type":"file"}))
+    image = forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={"class":"form-control mb-2"}),
+    )
+
     class Meta:
         model = Post
         fields = ['title', 'text', 'image']

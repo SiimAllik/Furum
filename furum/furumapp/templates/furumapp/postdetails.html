@@ -5,18 +5,20 @@
     <div class="container mt-5 d-flex flex-column justify-content-center">
 
         <!-- Post info - title, poster, posting time, text -->
-        <div class="px-5 py-3 d-flex flex-column shadow">
+        <div class="container px-4 py-3 d-flex shadow">
             {%if post.image %}
-            <div>
-                <img src="/static/images/{{ post.image.url }}" width="120">
+            <div class="my-3">
+                <img src="{{post.image.url}}" width="200">
             </div>
             {%endif%}
-            <div class="d-flex justify-content-between">
-                <p class="fs-2 fw-bold">{{ post.title }}</p>
-                <p class="">Posted by {{ post.user }} on {{ post.timestamp }}</p>
-            </div>
-            <div class="d-flex">
-                <p class="fs-5">{{ post.text }}</p>
+            <div class="d-flex flex-column container">
+                <div class="d-flex justify-content-between">
+                    <p class="fs-2 fw-bold">{{ post.title }}</p>
+                    <p class="">Posted by {{ post.user }} on {{ post.timestamp }}</p>
+                </div>
+                <div class="d-flex">
+                    <p class="fs-5">{{ post.text }}</p>
+                </div>
             </div>
         </div>
 

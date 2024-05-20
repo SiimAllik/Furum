@@ -10,11 +10,20 @@
             {% if posts %}
                 <!-- loop through search query if there is a result -->
                 {% for post in posts %}
-                    <div class="d-flex flex-column align-items-start mb-2 border">
-                        <a class="w-100 link-dark text-decoration-none px-5" href="/furum/post/{{ post.id }}/">
-                            <p class="fs-2 fw-bold">{{ post.title }}</p>
-                            <p class="">Posted by {{ post.user.username }} on {{ post.timestamp }}</p>
-                            <p class="fw-bold">{{ post.comment_count }} comments</p>
+                    <div class="mb-3 border shadow w-100">
+                        <a class="link-dark text-decoration-none" href="/furum/post/{{ post.id }}/">
+                            <div class="d-flex align-items-center">
+                            {%if post.image %}
+                                <div class="mx-4">
+                                    <img src="{{post.image.url}}" width="200">
+                                </div>
+                            {%endif%}
+                            <div class="d-flex container flex-column">
+                                <p class="fs-2 fw-bold">{{ post.title }}</p>
+                                <p class="">Posted by {{ post.user.username }} on {{ post.timestamp }}</p>
+                                <p class="fw-bold">{{ post.comment_count }} comments</p>
+                            </div>
+                            </div>
                         </a>
                     </div>
                 {% endfor %}

@@ -57,28 +57,32 @@ def sign_out(request):
 
 def Posts_View(request, topic):
     if request.method == 'GET':
+        default_data = {'image': ''}
         form = PostForm()
         posts = Post.objects.filter(topic=topic)
         context = {"posts": posts, "topic": topic, "form":form}
         return render(request, "furumapp/postsview.html", context)
     elif request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post_title = form.cleaned_data['title']
             post_text = form.cleaned_data['text']
             image = form.cleaned_data['image']
+
             post = Post(
-                title = post_title,
-                text = post_text,
-                timestamp = datetime.datetime.now(),
+                title=post_title,
+                text=post_text,
                 user=request.user,
                 topic=topic,
                 comment_count=0,
                 image=image
             )
+
             post.save()
             post_topic = Topic.objects.get(slug=topic)
             post_topic.increase_count()
+        else:
+            print('yikes')
         return redirect('posts', topic=topic)
 
 def Post_Details(request, post_id):
