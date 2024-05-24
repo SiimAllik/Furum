@@ -5,6 +5,7 @@ Forum for pet enthusiasts
 clone repo:
 ```sh
 $ git clone https://github.com/SiimAllik/Furum.git
+$ cd Furum
 ```
 Build docker container from Dockerfile
 
