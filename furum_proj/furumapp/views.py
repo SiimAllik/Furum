@@ -6,14 +6,16 @@ from .models import Post, Comment, Topic
 from django.db.models import Q
 import datetime
 
+
 def Home_View(request):
     topics = Topic.objects.all()
-    return render(request, "furumapp/index.html", {"topics" : topics})
+    return render(request, "furumapp/index.html", {"topics": topics})
+
 
 def sign_up(request):
     if request.method == 'GET':
         form = RegisterForm()
-        return render(request, 'furumapp/register.html', { 'form': form})
+        return render(request, 'furumapp/register.html', {'form': form})
 
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -26,12 +28,13 @@ def sign_up(request):
         else:
             return render(request, 'furumapp/register.html', {'form': form})
 
+
 def sign_in(request):
     if request.method == 'GET':
         form = LoginForm()
         if request.user.is_authenticated:
             return redirect('home')
-        return render(request, 'furumapp/login.html', {"form" : form})
+        return render(request, 'furumapp/login.html', {"form": form})
 
     elif request.method == 'POST':
         form = LoginForm(request.POST)
@@ -44,18 +47,20 @@ def sign_in(request):
                 return redirect('home')
 
         # form is not valid or user is not authenticated
-        form.add_error("password","invalid username or password")
-        return render(request, 'furumapp/login.html', {"form" : form})
+        form.add_error("password", "invalid username or password")
+        return render(request, 'furumapp/login.html', {"form": form})
+
 
 def sign_out(request):
     logout(request)
     return redirect('login')
 
+
 def Posts_View(request, topic):
     if request.method == 'GET':
         form = PostForm()
         posts = Post.objects.filter(topic=topic)
-        context = {"posts": posts, "topic": topic, "form":form}
+        context = {"posts": posts, "topic": topic, "form": form}
         return render(request, "furumapp/postsview.html", context)
     elif request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
@@ -81,6 +86,7 @@ def Posts_View(request, topic):
         context = {"posts": posts, "topic": topic, "form": form}
         return render(request, 'furumapp/postsview.html', context)
 
+
 def Post_Details(request, post_id):
     if request.method == 'GET':
         form = CommentForm()
@@ -94,7 +100,7 @@ def Post_Details(request, post_id):
             comment_text = form.cleaned_data['text']
             post = get_object_or_404(Post, id=post_id)
             comment = Comment(
-                text = comment_text,
+                text=comment_text,
                 user=request.user,
                 post=post
             )
@@ -108,6 +114,7 @@ def Post_Details(request, post_id):
         context = {"post": post, "comments": comments, "form": form}
         return render(request, "furumapp/postdetails.html", context)
 
+
 def comment_delete(request, post_id, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     post = get_object_or_404(Post, id=post_id)
@@ -119,6 +126,7 @@ def comment_delete(request, post_id, comment_id):
 
     return redirect('postdetails', post_id)
 
+
 def post_delete(request, topic, post_id):
     post = get_object_or_404(Post, id=post_id)
 
@@ -128,6 +136,7 @@ def post_delete(request, topic, post_id):
         post_topic.decrease_count()
 
     return redirect('posts', topic=topic)
+
 
 def search(request):
     if request.method == "GET":
